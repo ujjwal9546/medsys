@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+
+{% for i in d %}
+
+<div class="col-md-4">
+
+<div class="card">
+
+<h2>
+Dr {{i.user.username}}
+</h2>
+
+<p>
+{{i.specialization}}
+</p>
+
+<p>
+₹{{i.fee}}
+</p>
+
+<a
+class="btn btn-primary"
+
+href="/doctor/{{i.id}}">
+
+View Profile
+
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

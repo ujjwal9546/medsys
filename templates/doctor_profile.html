@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card">
+
+{% if d.photo %}
+
+<img
+
+src="{{d.photo.url}}"
+
+height="150"
+
+style="width:180px;height:180px;object-fit:cover;
+border-radius:50%;border:4px solid #0d6efd;
+box-shadow:0 0 15px rgba(0,0,0,.2)"
+
+>
+
+{% endif %}
+
+
+<h2>
+
+Dr {{d.user.username}}
+
+</h2>
+
+
+<p>
+
+{{d.specialization}}
+
+</p>
+
+
+<p>
+
+{{d.qualification}}
+
+</p>
+
+
+<p>
+
+{{d.experience}}
+
+years experience
+
+</p>
+
+
+<p>
+
+Hospital:
+
+{{d.hospital}}
+
+</p>
+
+
+<p>
+
+Location:
+
+{{d.location}}
+
+</p>
+
+
+<p>
+
+Available:
+
+{{d.available_from}}
+
+-
+
+{{d.available_to}}
+
+</p>
+
+
+<p>
+
+Fee:
+
+₹{{d.fee}}
+
+</p>
+
+
+<p>
+
+{{d.bio}}
+
+</p>
+
+
+<a
+
+href="/book_appointment/{{d.id}}"
+
+class="btn btn-success">
+
+Book Appointment
+
+</a>
+
+</div>
+
+{% endblock %}

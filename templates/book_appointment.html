@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+
+<h2>
+
+Appointment with
+
+Dr {{d.user.username}}
+
+</h2>
+
+<form method="post">
+
+{% csrf_token %}
+
+{{f.as_p}}
+
+<button class="btn btn-success">
+
+Continue Payment
+
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

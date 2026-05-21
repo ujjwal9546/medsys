@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card">
+
+<h2>
+
+Edit Doctor Profile
+
+</h2>
+
+
+{% if doctor.photo %}
+
+<img
+
+src="{{doctor.photo.url}}"
+
+style="
+width:150px;
+height:150px;
+object-fit:cover;
+border-radius:50%;
+display:block;
+margin:auto;
+"
+
+>
+
+{% endif %}
+
+
+<form
+method="POST"
+enctype="multipart/form-data">
+
+{% csrf_token %}
+
+
+{% for field in f %}
+
+<p>
+
+{{field.label}}
+
+<br>
+
+{{field}}
+
+<br>
+
+<span style="color:red">
+
+{{field.errors}}
+
+</span>
+
+</p>
+
+{% endfor %}
+
+
+<button
+type="submit"
+class="btn btn-success">
+
+Save
+
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

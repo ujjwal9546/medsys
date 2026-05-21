@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+
+<h2>
+
+Appointment Requests
+
+</h2>
+
+
+<table class="table">
+
+<tr>
+
+<th>
+
+Patient
+
+</th>
+
+<th>
+
+Date
+
+</th>
+
+<th>
+
+Time
+
+</th>
+
+<th>
+
+Reason
+
+</th>
+
+<th>
+
+Status
+
+</th>
+
+<th>
+
+Action
+
+</th>
+
+</tr>
+
+
+{% for i in a %}
+
+<tr>
+
+<td>
+
+{{i.patient.user.username}}
+
+</td>
+
+
+<td>
+
+{{i.date}}
+
+</td>
+
+
+<td>
+
+{{i.time}}
+
+</td>
+
+
+<td>
+
+{{i.reason}}
+
+</td>
+
+
+<td>
+
+{{i.status}}
+
+</td>
+
+
+<td>
+
+{% if i.status == 'pending' %}
+
+<a
+class="btn btn-success"
+
+href="/approve_appointment/{{i.id}}">
+
+Approve
+
+</a>
+
+
+<a
+class="btn btn-danger"
+
+href="/reject_appointment/{{i.id}}">
+
+Reject
+
+</a>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+from django.urls import path
+from .views import *
+
+urlpatterns=[
+path('',login_required(patient_dashboard),name='home'),
+path('register/',register,name='register'),
+path('login/',user_login,name='login'),
+path('logout/',user_logout,name='logout'),
+path('patient_dashboard/',patient_dashboard,name='patient_dashboard'),
+path('doctor_dashboard/',doctor_dashboard,name='doctor_dashboard'),
+path('admin_dashboard/',admin_dashboard,name='admin_dashboard'),
+path('staff_dashboard/',staff_dashboard,name='staff_dashboard'),
+path('approve_users/',approve_users,name='approve_users'),
+path('approve/<int:id>/',approve,name='approve'),
+path('add_staff/',add_staff,name='add_staff'),
+path('doctors/',doctors),
+path('reject/<int:id>/',reject,name='reject'),
+path('doctor_appointments/',doctor_appointments),
+path('approve_appointment/<int:id>/',approve_appointment),
+path('reject_appointment/<int:id>/',reject_appointment),
+path('doctor/<int:id>/',doctor_profile,name='doctor_profile'),
+path('book_appointment/<int:id>/',book_appointment),
+path('payment/<int:id>/',payment),
+path('my_appointments/',my_appointments,name='my_appointments'),
+path('doctor_appointments/',doctor_appointments,name='doctor_appointments'),
+path('approve_appointment/<int:id>/',approve_appointment,name='approve_appointment'),
+path('reject_appointment/<int:id>/',reject_appointment,name='reject_appointment'),
+path('edit_doctor/',edit_doctor,name='edit_doctor'),
+path('payment_success/<int:id>/<str:txn>/',payment_success,name='payment_success'),
+]
