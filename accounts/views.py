@@ -14,6 +14,9 @@ from patient.models import Patient
 from doctor.forms import DoctorForm
 import razorpay
 
+def home(request):
+    return render(request, "home.html")
+
 def register(request):
  f=RegisterForm(request.POST or None)
  if request.method=='POST':
