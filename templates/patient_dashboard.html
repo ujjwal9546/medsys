@@ -1,35 +1,102 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
-<div class="dash">
+<div class="dashboard-hero">
 
-<div class="box">
+<h1>
 
-<a href="/doctors">
+Welcome, {{user.name|default:user.username}} 👋
 
-Doctors
+</h1>
+
+<p>
+
+Manage appointments and explore doctors easily
+
+</p>
+
+</div>
+
+
+
+<div class="dashboard-grid">
+
+<a
+href="/doctors"
+class="dashboard-card">
+
+<div class="dash-icon">
+
+👨‍⚕️
+
+</div>
+
+<h3>
+
+Find Doctors
+
+</h3>
+
+<p>
+
+Explore specialists and hospitals
+
+</p>
 
 </a>
 
+
+
+<a
+href="/my_appointments"
+class="dashboard-card">
+
+<div class="dash-icon">
+
+📅
+
 </div>
 
+<h3>
 
-<div class="box">
+My Appointments
 
-<a href="/my_appointments">
+</h3>
 
-Appointments
+<p>
+
+Track booking and payment status
+
+</p>
 
 </a>
 
+
+
+<a
+href="/"
+class="dashboard-card">
+
+<div class="dash-icon">
+
+🏠
+
 </div>
 
+<h3>
 
-<div class="box">
+Home
 
-Notifications
+</h3>
 
-</div>
+<p>
+
+Browse categories and doctors
+
+</p>
+
+</a>
 
 </div>
 

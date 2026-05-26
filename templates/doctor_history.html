@@ -1,35 +1,25 @@
 {% extends 'base.html' %}
-
 {% block content %}
-
-<div class="appointment-head">
-
-<h1>
-
-My Appointments
-
-</h1>
 
 
 <a
-href="/clear_patient_history/"
-class="btn btn-danger">
+href="/clear_doctor_history/"
+class="btn btn-danger mb-4">
 
 Clear History
 
 </a>
 
-</div>
-
 
 
 {% for i in a %}
+
 
 <div class="appointment-card">
 
 <h3>
 
-Dr {{i.doctor.user.username}}
+{{i.patient.user.username}}
 
 </h3>
 
@@ -50,13 +40,32 @@ Dr {{i.doctor.user.username}}
 
 <p>
 
+📝 {{i.reason}}
+
+</p>
+
+
+<p>
+
+💰 ₹{{i.amount}}
+
+</p>
+
+
+<p>
+
+Payment:
+
+{{i.payment_status}}
+
+</p>
+
+
+<p>
+
 Status:
 
-<span class="{{i.status}}">
-
 {{i.status}}
-
-</span>
 
 </p>
 
@@ -78,9 +87,11 @@ class="receipt-img"
 
 <a
 
-href="/delete_patient_appointment/{{i.id}}"
+href="/delete_doctor_appointment/{{i.id}}"
 
-class="btn btn-danger">
+class="btn btn-danger"
+
+>
 
 Delete
 
@@ -90,15 +101,19 @@ Delete
 </div>
 
 
+
 {% empty %}
+
 
 <h3>
 
-No appointments
+No appointment history
 
 </h3>
 
+
 {% endfor %}
+
 
 
 {% endblock %}

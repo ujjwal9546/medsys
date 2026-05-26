@@ -2,29 +2,37 @@
 
 {% block content %}
 
-<div class="card">
+<div class="card p-4">
 
 <h2>
 
-Appointment with
+📅 Appointment with
 
-Dr {{d.user.username}}
+Dr {{d.user.name|default:d.user.username}}
 
 </h2>
 
-<form method="post">
+
+<form method="POST">
 
 {% csrf_token %}
 
 {{f.as_p}}
 
-<button class="btn btn-success">
 
-Continue Payment
+<button
+
+class="btn btn-success mt-3"
+
+>
+
+➡ Continue Payment
 
 </button>
 
+
 </form>
+
 
 </div>
 

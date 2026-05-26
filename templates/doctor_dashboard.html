@@ -1,14 +1,128 @@
-{% extends 'base.html' %}{% block content %}
-<div class="dash">
-<div class="box"><a href="/add_staff">Add Staff</a></div>
-<div class="box">
-<a href="/doctor_appointments">
-Appointments
-</a></div>
-<div class="box">
-<a href="/edit_doctor">
-Edit Profile
-</a></div>
-<div class="box">Revenue</div>
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-hero">
+
+<h1>
+
+Welcome Dr {{request.user.name|default:request.user.username}}👨‍⚕️
+
+</h1>
+
+<p>
+
+Manage appointments, profile and staff
+
+</p>
+
 </div>
+
+
+
+<div class="dashboard-grid">
+
+<a
+href="/doctor_appointments"
+class="dashboard-card">
+
+<div class="dash-icon">
+
+📅
+
+</div>
+
+<h3>
+
+Appointments
+
+</h3>
+
+<p>
+
+View patient appointments
+
+</p>
+
+</a>
+
+
+
+<a
+href="/edit_doctor"
+class="dashboard-card">
+
+<div class="dash-icon">
+
+🩺
+
+</div>
+
+<h3>
+
+Edit Profile
+
+</h3>
+
+<p>
+
+Update specialization and schedule
+
+</p>
+
+</a>
+
+
+
+<a
+href="/add_staff"
+class="dashboard-card">
+
+<div class="dash-icon">
+
+👥
+
+</div>
+
+<h3>
+
+Add Staff
+
+</h3>
+
+<p>
+
+Manage assistants and staff
+
+</p>
+
+</a>
+
+<a href="/my_appointments/" class="dashboard-card">
+
+<div class="dash-icon">
+
+📋
+
+</div>
+
+
+<h3>
+
+My Bookings
+
+</h3>
+
+
+<p>
+
+View appointments you booked for yourself
+
+</p>
+
+
+</a>
+
+</div>
+
 {% endblock %}

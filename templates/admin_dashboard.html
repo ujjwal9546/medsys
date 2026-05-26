@@ -1,7 +1,82 @@
-{% extends 'base.html' %}{% block content %}
-<div class="dash">
-<div class="box"><a href="/approve_users">Approvals</a></div>
-<div class="box">Doctors</div>
-<div class="box">Reports</div>
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-hero">
+
+<h1>
+
+Admin Dashboard ⚙️
+
+</h1>
+<h2>
+    Welcome {{request.user.name|default:request.user.username}}
+</h2>
+
+<p>
+
+Manage approvals and platform activities
+
+</p>
+
 </div>
+
+
+
+<div class="dashboard-grid">
+
+
+<a
+href="/approve_users"
+class="dashboard-card">
+
+<div class="dash-icon">
+
+✅
+
+</div>
+
+<h3>
+
+Approvals
+
+</h3>
+
+<p>
+
+Approve doctors
+
+</p>
+
+</a>
+
+
+
+
+<a
+href="/add_admin"
+class="dashboard-card">
+
+<div class="dash-icon">
+
+👑
+
+</div>
+
+<h3>
+
+Add Admin
+
+</h3>
+
+<p>
+
+Create new administrators securely
+
+</p>
+
+</a>
+
+</div>
+
 {% endblock %}

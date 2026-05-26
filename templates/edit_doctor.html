@@ -1,33 +1,14 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
-<div class="card">
+<div class="form-card">
 
 <h2>
 
-Edit Doctor Profile
+Update Profile
 
 </h2>
-
-
-{% if doctor.photo %}
-
-<img
-
-src="{{doctor.photo.url}}"
-
-style="
-width:150px;
-height:150px;
-object-fit:cover;
-border-radius:50%;
-display:block;
-margin:auto;
-"
-
->
-
-{% endif %}
 
 
 <form
@@ -39,34 +20,33 @@ enctype="multipart/form-data">
 
 {% for field in f %}
 
-<p>
+<div class="form-group">
+
+<label>
 
 {{field.label}}
 
-<br>
+</label>
 
 {{field}}
 
-<br>
-
-<span style="color:red">
+<div class="err">
 
 {{field.errors}}
 
-</span>
+</div>
 
-</p>
+</div>
 
 {% endfor %}
 
 
-<button
-type="submit"
-class="btn btn-success">
+<button class="save-btn">
 
-Save
+Save Profile
 
 </button>
+
 
 </form>
 

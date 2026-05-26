@@ -2,6 +2,7 @@
 
 {% block content %}
 
+
 <div class="auth-page">
 
 <div class="auth-card">
@@ -11,15 +12,15 @@
 
 <h1>
 
-🏥 MedSys
+👑 Add Admin
 
 </h1>
 
 
 <p>
 
-Create your account and
-manage healthcare digitally.
+Create trusted admins
+for managing MedSys.
 
 </p>
 
@@ -28,34 +29,30 @@ manage healthcare digitally.
 
 <li>
 
-✔ Register as Patient
+✔ Secure access
 
 </li>
 
 
 <li>
 
-✔ Register as Doctor
+✔ Instant approval
 
 </li>
 
 
 <li>
 
-✔ Secure Authentication
+✔ Password confirmation
 
 </li>
 
-
-<li>
-
-✔ Easy Appointment Booking
-
-</li>
 
 </ul>
 
+
 </div>
+
 
 
 
@@ -63,10 +60,26 @@ manage healthcare digitally.
 
 <h2>
 
-Create Account
+Create Admin
 
 </h2>
 
+
+{% if success %}
+
+<div class="success-box">
+
+{{success}}
+
+</div>
+
+{% endif %}
+
+
+
+<form method="post">
+
+{% csrf_token %}
 
 
 {% if f.non_field_errors %}
@@ -80,17 +93,9 @@ Create Account
 {% endif %}
 
 
-
-<form method="post">
-
-{% csrf_token %}
-
-
-
 {% for field in f %}
 
 <div class="form-group">
-
 
 <label>
 
@@ -99,9 +104,7 @@ Create Account
 </label>
 
 
-
 {{field}}
-
 
 
 <div class="err">
@@ -110,35 +113,17 @@ Create Account
 
 </div>
 
-
 </div>
 
 {% endfor %}
 
 
 
-<button
-class="auth-btn">
+<button class="auth-btn">
 
-Create Account
+Create Admin
 
 </button>
-
-
-
-<p class="bottom-text">
-
-Already have account?
-
-<a href="/login">
-
-Login
-
-</a>
-
-</p>
-
-
 
 </form>
 
@@ -147,6 +132,5 @@ Login
 </div>
 
 </div>
-
 
 {% endblock %}

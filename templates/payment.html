@@ -1,24 +1,57 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="card">
+<div class="card p-4 text-center">
 
-<h2>
-Doctor: {{a.doctor.user.username}}
-</h2>
+    <h2>Doctor: {{a.doctor.user.username}}</h2>
+    <h3>Amount: ₹{{a.amount}}</h3>
 
-<h3>
-Amount: ₹{{a.amount}}
-</h3>
-
-<a
-href="/payment_success/{{a.id}}/TESTPAY{{a.id}}/"
-class="btn btn-success">
-
-Simulate Payment Success
-
-</a>
+    <button id="rzp-button" class="btn btn-success mt-3">
+        Pay Now
+    </button>
 
 </div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+var options = {
+    key: "{{ key }}",
+    amount: "{{ order.amount }}",
+    currency: "INR",
+    name: "MedSys Hospital",
+    description: "Appointment Payment",
+    order_id: "{{ order.id }}",
+
+    handler: function (response) {
+
+        const url =
+            "/payment_success/{{a.id}}/?payment_id=" + response.razorpay_payment_id +
+            "&order_id=" + response.razorpay_order_id +
+            "&signature=" + response.razorpay_signature;
+
+        window.location.href = url;
+    },
+
+    theme: {
+        color: "#3399cc"
+    },
+
+    modal: {
+        ondismiss: function () {
+            console.log("Payment closed");
+        }
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById('rzp-button').onclick = function (e) {
+    e.preventDefault();
+    rzp.open();
+};
+
+</script>
 
 {% endblock %}

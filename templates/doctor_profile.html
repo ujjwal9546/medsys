@@ -22,7 +22,7 @@ box-shadow:0 0 15px rgba(0,0,0,.2)"
 
 <h2>
 
-Dr {{d.user.username}}
+Dr {{d.user.name|default:d.user.username}}
 
 </h2>
 
@@ -67,10 +67,26 @@ Location:
 
 </p>
 
+<p>
+
+<b>
+
+Available Days:
+
+</b>
+
+{{d.available_days}}
+
+</p>
+
 
 <p>
 
-Available:
+<b>
+
+Timing:
+
+</b>
 
 {{d.available_from}}
 
@@ -97,15 +113,42 @@ Fee:
 </p>
 
 
+{% if user.is_authenticated %}
+
 <a
 
-href="/book_appointment/{{d.id}}"
+href=
 
-class="btn btn-success">
+"/book_appointment/{{d.id}}"
+
+class="btn btn-success"
+
+>
 
 Book Appointment
 
 </a>
+
+
+{% else %}
+
+
+<a
+
+href=
+
+"/login"
+
+class="btn btn-warning"
+
+>
+
+Login to Book
+
+</a>
+
+
+{% endif %}
 
 </div>
 

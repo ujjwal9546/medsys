@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container text-center mt-5">
+
+    <h2>Verify Payment</h2>
+
+    <h4>Amount: ₹{{ a.amount }}</h4>
+
+    {% if a.payment_screenshot %}
+        <img src="{{ a.payment_screenshot.url }}" width="300">
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <button name="action" value="approve" class="btn btn-success mt-3">
+            Approve
+        </button>
+
+        <button name="action" value="reject" class="btn btn-danger mt-3">
+            Reject
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

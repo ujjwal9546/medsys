@@ -1,16 +1,258 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
-<div class="text-center mt-5">
+<div class="hero">
 
-    <h1>🏥 MedSys Hospital System</h1>
-    <p>Welcome to Online Appointment System</p>
+<h1>
+Find Trusted Doctors
+</h1>
 
-    <a href="/login/" class="btn btn-primary">Login</a>
-    <a href="/register/" class="btn btn-success">Register</a>
-    <a href="/doctors/" class="btn btn-info">View Doctors</a>
+<p>
+Book appointments with specialists near you
+</p>
 
 </div>
+
+
+
+<div class="cats">
+
+{% for c in categories %}
+
+<span class="cat-btn"
+
+onclick="filterDoctors('{{c}}')">
+
+{{c}}
+
+</span>
+
+{% endfor %}
+
+</div>
+
+
+
+<div class="row" id="doctorContainer">
+
+<div class="row">
+
+{% for i in doctors %}
+
+{% include 'doctor_card.html' %}
+
+{% endfor %}
+
+</div>
+
+</div>
+
+
+
+<hr style="margin:50px 0;">
+
+
+<h2 style="text-align:center; margin-bottom:30px;">
+
+👨‍💻 Meet Developers
+
+</h2>
+
+
+
+<div class="developer-section">
+
+<a href="https://www.linkedin.com/in/ujjwal---kumar?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+
+target="_blank"
+
+class="developer-card">
+
+<img src="/media/developer/dev1.jpg"
+
+class="developer-img">
+
+<h4>Ujjwal Kumar</h4>
+
+<p>ujjwalkumarray9546@gmail.com</p>
+
+</a>
+
+
+
+<a href="https://www.linkedin.com/in/aryan-kumar-67aa773a5?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+
+target="_blank"
+
+class="developer-card">
+
+<img src="/media/developer/dev2.jpg"
+
+class="developer-img">
+
+<h4>Aryan Kumar</h4>
+
+<p>kumararyan16.02@gmail.com</p>
+
+</a>
+
+
+
+<a href="https://www.linkedin.com/in/ankit-kumar-b02739342?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+
+target="_blank"
+
+class="developer-card">
+
+<img src="/media/developer/dev3.jpg"
+
+class="developer-img">
+
+<h4>Ankit Kumar</h4>
+
+<p>ankitk28274@gmail.com</p>
+
+</a>
+
+
+
+<a href="https://www.linkedin.com/in/suman-kumar-ojha-0a871032b?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+
+target="_blank"
+
+class="developer-card">
+
+<img src="/media/developer/dev4.jpg"
+
+class="developer-img">
+
+<h4>Suman Kumar Ojha</h4>
+
+<p>sumanoj2580@gmail.com</p>
+
+</a>
+
+</div>
+
+
+
+<script>
+
+function filterDoctors(category){
+
+let doctors=
+document.querySelectorAll('.doctor-item');
+
+category=
+category.toLowerCase();
+
+let known=[
+
+'cardiology',
+'neurology',
+'orthopedic',
+'dermatology',
+'pediatric',
+'ent',
+'psychiatry',
+'general',
+'gynecology'
+
+];
+
+doctors.forEach(
+
+doctor=>{
+
+let spec=
+
+doctor.dataset.specialization
+
+.toLowerCase();
+
+
+
+if(
+
+category=='all'
+
+){
+
+doctor.style.display='block';
+
+}
+
+
+else if(
+
+category=='other'
+
+){
+
+doctor.style.display=
+
+known.includes(spec)
+
+?
+
+'none'
+
+:
+
+'block';
+
+}
+
+
+else{
+
+doctor.style.display=
+
+spec.includes(category)
+
+?
+
+'block'
+
+:
+
+'none';
+
+}
+
+}
+
+);
+
+}
+
+</script>
+
+
+
+<footer class="main-footer">
+
+<h2>
+
+Online Doctor Appointment System
+
+</h2>
+
+
+<p>
+
+Book appointments with trusted doctors anytime, anywhere.
+
+</p>
+
+
+<p class="copyright">
+
+© 2026 Online Doctor Appointment System | All Rights Reserved
+
+</p>
+
+</footer>
+
 
 {% endblock %}

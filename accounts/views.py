@@ -1,21 +1,66 @@
-from django.shortcuts import render,redirect
-from .forms import RegisterForm
-from django.contrib.auth import authenticate,login,logout
+from django.shortcuts import render, redirect
+from .forms import RegisterForm,AddAdminForm
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import User
 from django.core.mail import send_mail
 from django.conf import settings
+
+from .models import User
 from doctor.models import Doctor
 from staff.models import Staff
 from appointment.models import Appointment
+from patient.models import Patient
+
 from staff.forms import StaffForm
 from appointment.forms import AppointmentForm
-from patient.models import Patient
 from doctor.forms import DoctorForm
-import razorpay
 
 def home(request):
-    return render(request, "home.html")
+
+    doctors = Doctor.objects.all()
+
+    categories = [
+
+        'All',
+
+        'Cardiology',
+
+        'Neurology',
+
+        'Orthopedic',
+
+        'Dermatology',
+
+        'ENT',
+
+        'Psychiatry',
+
+        'General',
+
+        'Pediatric',
+
+        'Gynecology',
+
+        'Other'
+
+    ]
+
+    return render(
+
+        request,
+
+        'home.html',
+
+        {
+
+        'doctors': doctors,
+
+        'categories': categories
+
+        }
+
+    )
+
 
 def register(request):
  f=RegisterForm(request.POST or None)
@@ -62,40 +107,121 @@ def register(request):
 
  return render(request,'register.html',{'f':f})
 
+
 def user_login(request):
 
- if request.method=='POST':
+    if request.method=='POST':
 
-  u=request.POST['username']
-  p=request.POST['password']
+        u=request.POST['username']
 
-  user=authenticate(username=u,password=p)
+        p=request.POST['password']
 
-  if user:
 
-   # ONLY block doctor + admin
-   if user.role in ['doctor','admin'] and not user.approved:
+        user=authenticate(
+
+            username=u,
+
+            password=p
+
+        )
+
+
+        if user:
+
+
+            if user.role in [
+
+                'doctor',
+
+                'admin'
+
+            ] and not user.approved:
+
+
+                return render(
+
+                    request,
+
+                    'login.html',
+
+                    {
+
+                        'e':
+
+                        '⏳ Approval Pending'
+
+                    }
+
+                )
+
+
+            login(
+
+                request,
+
+                user
+
+            )
+
+
+            if user.role=='admin':
+
+                return redirect(
+
+                    'admin_dashboard'
+
+                )
+
+
+            if user.role=='doctor':
+
+                return redirect(
+
+                    'doctor_dashboard'
+
+                )
+
+
+            if user.role=='staff':
+
+                return redirect(
+
+                    'staff_dashboard'
+
+                )
+
+
+            return redirect(
+
+                'patient_dashboard'
+
+            )
+
+
+        return render(
+
+            request,
+
+            'login.html',
+
+            {
+
+                'e':
+
+                '❌ Invalid username or password'
+
+            }
+
+        )
+
 
     return render(
-     request,
-     'login.html',
-     {'e':'Approval Pending'}
+
+        request,
+
+        'login.html'
+
     )
-
-   login(request,user)
-
-   if user.role=='admin':
-    return redirect('admin_dashboard')
-
-   if user.role=='doctor':
-    return redirect('doctor_dashboard')
-
-   if user.role=='staff':
-    return redirect('staff_dashboard')
-
-   return redirect('patient_dashboard')
-
- return render(request,'login.html')
 
 def user_logout(request):
  logout(request)
@@ -134,6 +260,80 @@ def reject(request,id):
  return redirect('approve_users')
 
 @login_required
+def add_admin(request):
+
+    if request.user.role!='admin':
+
+        return redirect('/')
+
+
+    f=AddAdminForm(
+
+        request.POST or None
+
+    )
+
+
+    if request.method=="POST":
+
+        if f.is_valid():
+
+            u=f.save(
+
+                commit=False
+
+            )
+
+
+            u.role='admin'
+
+            u.approved=True
+
+
+            u.set_password(
+
+                f.cleaned_data['password']
+
+            )
+
+
+            u.save()
+
+
+            return render(
+
+                request,
+
+                'add_admin.html',
+
+                {
+
+                    'f':AddAdminForm(),
+
+                    'success':
+
+                    '✅ New admin created'
+
+                }
+
+            )
+
+
+    return render(
+
+        request,
+
+        'add_admin.html',
+
+        {
+
+            'f':f
+
+        }
+
+    )
+
+@login_required
 def add_staff(request):
  f=StaffForm(request.POST or None)
  if f.is_valid():
@@ -143,383 +343,653 @@ def add_staff(request):
   return redirect('doctor_dashboard')
  return render(request,'add_staff.html',{'f':f})
 
-@login_required
 def doctors(request):
- d=Doctor.objects.all()
- return render(request,'doctors.html',{'d':d})
 
+    d = Doctor.objects.all()
 
-@login_required
-def doctor_appointments(request):
- a=Appointment.objects.filter(
- doctor__user=request.user
- )
- return render(
- request,
- 'doctor_appointments.html',
- {'a':a}
- )
+    categories = [
 
-@login_required
-def approve_appointment(request,id):
- x=Appointment.objects.get(id=id)
- x.status='approved'
- x.save()
- return redirect(
- 'doctor_appointments'
- )
+        'All',
 
-@login_required
-def reject_appointment(request,id):
- x=Appointment.objects.get(id=id)
- x.status='rejected'
- x.save()
- return redirect(
- 'doctor_appointments'
- )
+        'Cardiology',
 
-@login_required
+        'Neurology',
+
+        'Orthopedic',
+
+        'Dermatology',
+
+        'ENT',
+
+        'Psychiatry',
+
+        'General',
+
+        'Pediatric',
+
+        'Gynecology',
+
+        'Other'
+
+    ]
+
+    return render(
+
+        request,
+
+        'doctors.html',
+
+        {
+
+        'd': d,
+
+        'categories': categories
+
+        }
+
+    )
+
 def doctor_profile(request,id):
  d=Doctor.objects.get(id=id)
  return render(request,'doctor_profile.html',{'d':d})
 
 @login_required
-def book_appointment(request,id):
+def book_appointment(request, id):
 
- d=Doctor.objects.get(id=id)
+    d = Doctor.objects.get(id=id)
 
- f=AppointmentForm(
-  request.POST or None
- )
+    f = AppointmentForm(
+        request.POST or None,
+        doctor=d
+    )
 
- if request.user.role != 'patient':
-  return redirect('patient_dashboard')
+    # block admin only
+    if request.user.role == 'admin':
 
- patient = Patient.objects.get(user=request.user)
-
- if f.is_valid():
-
-  a=f.save(commit=False)
-
-  a.patient=patient
-
-  a.doctor=d
-
-  a.amount=d.fee
-
-  a.save()
-
-  return redirect(
-   f'/payment/{a.id}'
-  )
+        return redirect(
+            'admin_dashboard'
+        )
 
 
- return render(
-  request,
-  'book_appointment.html',
-  {'f':f,'d':d}
- )
+    patient, created = Patient.objects.get_or_create(
 
-import razorpay
+        user=request.user,
 
+        defaults={
+            'age': 20,
+            'gender': 'Other'
+        }
 
-@login_required
-def payment(request,id):
-
- a=Appointment.objects.get(id=id)
-
- client=razorpay.Client(
-
-  auth=(
-
-   settings.RAZORPAY_KEY,
-
-   settings.RAZORPAY_SECRET
-
-  )
-
- )
+    )
 
 
- order=client.order.create({
+    if request.method == "POST":
 
- 'amount':a.amount*100,
+        if f.is_valid():
 
- 'currency':'INR',
+            a = f.save(
+                commit=False
+            )
 
- 'payment_capture':1
+            a.patient = patient
+            a.doctor = d
+            a.amount = d.fee
 
- })
+            a.save()
+
+            return redirect(
+                'upload_payment',
+                id=a.id
+            )
 
 
- return render(
+    return render(
 
-  request,
+        request,
 
-  'payment.html',
+        'book_appointment.html',
 
-  {
+        {
+            'f': f,
+            'd': d
+        }
 
-   'a':a,
-
-   'order':order,
-
-   'key':settings.RAZORPAY_KEY
-
-  }
-
- )
+    )
 
 @login_required
-def payment_success(
+def upload_payment(request,id):
 
- request,
-
- id,
-
- txn
-
-):
-
- a=Appointment.objects.get(
-  id=id
- )
+    a=Appointment.objects.get(id=id)
 
 
- a.paid=True
+    if a.final_amount == 0:
 
- a.transaction=txn
+        a.final_amount = a.amount
 
- a.status='pending'
-
-
- a.save()
+        a.save()
 
 
- send_mail(
-
- 'Payment Success',
+    if request.method=="POST":
 
 
- f'''
+        coupon=request.POST.get(
 
-Payment completed
+            'coupon'
 
-
-Doctor:
-
-{a.doctor.user.username}
+        )
 
 
-Date:
+        # Apply coupon immediately
 
-{a.date}
-
-
-Time:
-
-{a.time}
+        if coupon=="MED10":
 
 
-Amount:
-
-₹{a.amount}
+            a.coupon_code="MED10"
 
 
-Transaction:
+            a.discount=(
 
-{txn}
+                a.amount*10
 
-
-Appointment waiting for approval
-
-
- ''',
+            )//100
 
 
- settings.EMAIL_HOST_USER,
+            a.final_amount=(
+
+                a.amount-a.discount
+
+            )
 
 
- [a.patient.user.email],
+        else:
 
 
- fail_silently=True
-
- )
+            a.coupon_code=""
 
 
- # Optional doctor email
+            a.discount=0
 
 
- send_mail(
-
- 'New Appointment Request',
+            a.final_amount=a.amount
 
 
- f'''
+        # upload screenshot only if present
 
-New paid appointment
+        if request.FILES.get(
 
+            'payment_screenshot'
+
+        ):
+
+
+            a.payment_screenshot=\
+                request.FILES[
+
+                'payment_screenshot'
+
+            ]
+
+
+            a.payment_status='submitted'
+
+
+            a.save()
+
+
+            send_mail(
+
+                'Payment Submitted',
+
+                f'''
 
 Patient:
 
 {a.patient.user.username}
 
+submitted payment proof
 
-Date:
+''',
 
-{a.date}
+                settings.EMAIL_HOST_USER,
 
+                [a.doctor.user.email],
 
-Time:
+                fail_silently=True
 
-{a.time}
-
-
-Amount:
-
-₹{a.amount}
-
- ''',
+            )
 
 
- settings.EMAIL_HOST_USER,
+            return redirect(
+
+                'my_appointments'
+
+            )
 
 
- [a.doctor.user.email],
+        a.save()
 
 
- fail_silently=True
+    return render(
 
- )
+        request,
 
+        'upload_payment.html',
 
- return redirect(
+        {
 
- 'my_appointments'
+            'a':a
 
- )
+        }
+
+    )
+
+@login_required
+def verify_payment(request, id):
+    a = Appointment.objects.get(id=id)
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "approve":
+            a.payment_status = "verified"
+            a.status = "approved"
+
+        elif action == "reject":
+            a.payment_status = "rejected"
+            a.status = "pending"
+
+        a.save()
+        return redirect('doctor_appointments')
+
+    return render(request, 'verify_payment.html', {'a': a})
 
 @login_required
 def my_appointments(request):
 
- a=Appointment.objects.filter(
- patient__user=request.user
- ).order_by('-created')
+    a=Appointment.objects.filter(
 
- return render(
- request,
- 'my_appointments.html',
- {'a':a}
- )
+    patient__user=request.user,
+
+    hidden_by_patient=False
+
+    ).order_by(
+
+        '-created'
+
+    )
+
+
+    return render(
+
+        request,
+
+        'my_appointments.html',
+
+        {
+
+            'a':a
+
+        }
+
+    )
 
 @login_required
 def doctor_appointments(request):
 
- d=Doctor.objects.get(
-  user=request.user
- )
-
- a=Appointment.objects.filter(
-  doctor=d
- ).order_by('-id')
-
- return render(
-  request,
-  'doctor_appointments.html',
-  {'a':a}
- )
+    d=Doctor.objects.get(
+        user=request.user
+    )
 
 
+    a=Appointment.objects.filter(
+
+        doctor=d,
+
+        status='pending'
+
+    ).order_by(
+
+        '-created'
+
+    )
+
+
+    return render(
+
+        request,
+
+        'doctor_appointments.html',
+
+        {
+
+            'a':a
+
+        }
+
+    )
 @login_required
 def approve_appointment(request,id):
 
- x=Appointment.objects.get(id=id)
+ x=Appointment.objects.get(
+  id=id
+ )
+
+ if x.payment_status != 'submitted':
+
+  return redirect(
+   'doctor_appointments'
+  )
+
+
+ x.payment_status='verified'
 
  x.status='approved'
 
+
  x.save()
 
+
  send_mail(
- 'Appointment Approved',
- 'Your appointment approved',
+
+  'Appointment Approved',
+
+  f'''
+
+ Your payment has been verified
+
+ Doctor:
+
+ {x.doctor.user.username}
+
+ Date:
+
+ {x.date}
+
+ Time:
+
+ {x.time}
+
+ Appointment approved
+
+ ''',
+
  settings.EMAIL_HOST_USER,
+
  [x.patient.user.email],
+
  fail_silently=True
+
  )
+
 
  return redirect(
- 'doctor_appointments'
- )
 
+  'doctor_appointments'
+
+ )
 
 @login_required
 def reject_appointment(request,id):
 
- x=Appointment.objects.get(id=id)
+    x=Appointment.objects.get(
+        id=id
+    )
 
- x.status='rejected'
+    x.status='rejected'
+    x.payment_status='rejected'
 
- x.save()
+    x.save()
 
- send_mail(
- 'Appointment Rejected',
- 'Your appointment rejected',
- settings.EMAIL_HOST_USER,
- [x.patient.user.email],
- fail_silently=True
- )
 
- return redirect(
- 'doctor_appointments'
- )
+    send_mail(
 
+        'Appointment Rejected',
+
+        f'''
+
+Appointment rejected
+
+Doctor:
+
+{x.doctor.user.username}
+
+Date:
+
+{x.date}
+
+''',
+
+        settings.EMAIL_HOST_USER,
+
+        [x.patient.user.email],
+
+        fail_silently=True
+
+    )
+
+
+    return redirect(
+        'doctor_appointments'
+    )
+@login_required
+def delete_patient_appointment(request,id):
+
+    a=Appointment.objects.get(id=id)
+
+    a.hidden_by_patient=True
+
+
+    if (
+        a.hidden_by_patient
+        and
+        a.hidden_by_doctor
+    ):
+
+        a.delete()
+
+    else:
+
+        a.save()
+
+
+    return redirect(
+        'my_appointments'
+    )
+
+@login_required
+def delete_doctor_appointment(request,id):
+
+    a=Appointment.objects.get(
+        id=id
+    )
+
+    a.hidden_by_doctor=True
+
+    a.save()
+
+    return redirect(
+        'doctor_history'
+    )
+    
+
+@login_required
+def clear_patient_history(request):
+
+    appointments=Appointment.objects.filter(
+
+        patient__user=request.user,
+
+        hidden_by_patient=False
+
+    )
+
+
+    for a in appointments:
+
+        a.hidden_by_patient=True
+
+
+        if (
+
+            a.hidden_by_patient
+
+            and
+
+            a.hidden_by_doctor
+
+        ):
+
+            a.delete()
+
+        else:
+
+            a.save()
+
+
+    return redirect(
+        'my_appointments'
+    )
+
+
+@login_required
+def clear_doctor_history(request):
+
+    doctor=Doctor.objects.get(
+        user=request.user
+    )
+
+
+    appointments=Appointment.objects.filter(
+
+        doctor=doctor,
+
+        hidden_by_doctor=False
+
+    ).exclude(
+
+        status='pending'
+
+    )
+
+
+    for a in appointments:
+
+        a.hidden_by_doctor=True
+
+
+        if (
+
+            a.hidden_by_patient
+
+            and
+
+            a.hidden_by_doctor
+
+        ):
+
+            a.delete()
+
+
+        else:
+
+            a.save()
+
+
+    return redirect(
+
+        'doctor_history'
+
+    )
 @login_required
 def edit_doctor(request):
 
- doctor,_=Doctor.objects.get_or_create(
-  user=request.user
- )
-
- if request.method=="POST":
-
-  f=DoctorForm(
-   request.POST,
-   request.FILES,
-   instance=doctor
-  )
-
-  if f.is_valid():
-
-   x=f.save(
-    commit=False
-   )
-
-   x.user=request.user
-
-   x.save()
-
-   return redirect(
-    'doctor_profile',
-    id=x.id
-   )
-
-  print(
-   f.errors
-  )
-
- else:
-
-  f=DoctorForm(
-   instance=doctor
-  )
+    doctor,_=Doctor.objects.get_or_create(
+        user=request.user
+    )
 
 
- return render(
-  request,
-  'edit_doctor.html',
-  {
-   'f':f,
-   'doctor':doctor
-  }
- )
+    if request.method=="POST":
+
+        f=DoctorForm(
+            request.POST,
+            request.FILES,
+            instance=doctor
+        )
+
+
+        if f.is_valid():
+
+            x=f.save(
+                commit=False
+            )
+
+            x.user=request.user
+
+            x.save()
+
+            return redirect(
+                'doctor_profile',
+                id=x.id
+            )
+
+    else:
+
+        f=DoctorForm(
+            instance=doctor
+        )
+
+
+    return render(
+
+        request,
+
+        'edit_doctor.html',
+
+        {
+
+            'f':f,
+
+            'doctor':doctor
+
+        }
+
+    )
+
+@login_required
+def doctor_history(request):
+
+    doctor=Doctor.objects.get(
+        user=request.user
+    )
+
+
+    a=Appointment.objects.filter(
+
+        doctor=doctor,
+
+        hidden_by_doctor=False
+
+    ).exclude(
+
+        status='pending'
+
+    ).order_by(
+
+        '-created'
+
+    )
+
+
+    return render(
+
+        request,
+
+        'doctor_history.html',
+
+        {
+
+            'a':a
+
+        }
+
+    )

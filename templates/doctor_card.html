@@ -1,0 +1,159 @@
+<div
+class="col-lg-6 mb-4 doctor-item"
+data-specialization="{{i.specialization|lower}}"
+>
+
+<div class="doctor-card">
+
+
+<div class="doc-top">
+
+
+{% if i.photo %}
+
+<img
+src="{{i.photo.url}}"
+class="doc-photo">
+
+{% else %}
+
+<div class="dummy-photo">
+
+{{i.user.username|first}}
+
+</div>
+
+{% endif %}
+
+
+
+<div>
+
+<h4>
+
+Dr {{i.user.name|default:i.user.username}}
+
+</h4>
+
+
+<div class="spec">
+
+{{i.specialization}}
+
+</div>
+
+
+<p class="mb-1">
+
+🏥 {{i.hospital}}
+
+</p>
+
+
+<p class="text-muted">
+
+📍 {{i.location}}
+
+</p>
+
+</div>
+
+</div>
+
+
+
+
+<div class="info-grid">
+
+
+<div>
+
+Experience
+
+<br>
+
+<b>
+
+{{i.experience}}
+
+yrs
+
+</b>
+
+</div>
+
+
+
+<div>
+
+Fee
+
+<br>
+
+<b>
+
+₹{{i.fee}}
+
+</b>
+
+</div>
+
+
+
+<div>
+
+Available
+
+<br>
+
+<b>
+
+{{i.available_days}}
+
+</b>
+
+</div>
+
+
+
+<div>
+
+Timing
+
+<br>
+
+<b>
+
+{{i.available_from}}
+
+-
+
+{{i.available_to}}
+
+</b>
+
+</div>
+
+
+</div>
+
+
+
+
+<a
+
+href="/doctor/{{i.id}}"
+
+class="btn btn-primary w-100"
+
+>
+
+View Profile
+
+</a>
+
+
+
+</div>
+
+</div>

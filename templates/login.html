@@ -1,13 +1,128 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<div class="card">
-    <h2>Login</h2>
-    {% if e %}
-    <p>{{e}}</p>
-    {% endif %}
-    <form method="post">
-        {% csrf_token %}
-        <input class="form-control mb-2" name="username" placeholder="username">
-        <input class="form-control mb-2" type="password" name="password" placeholder="password">
-        <button class="btn btn-success">Login</button></form></div>
+
+<div class="auth-page">
+
+<div class="auth-card">
+
+<div class="auth-left">
+
+<h1>
+
+🏥 Welcome Back
+
+</h1>
+
+
+<p>
+
+Login to book appointments,
+manage profiles and access healthcare services.
+
+</p>
+
+</div>
+
+
+
+<div class="auth-right">
+
+<h2>
+
+Login
+
+</h2>
+
+
+
+{% if e %}
+
+<div class="error-box">
+
+{{e}}
+
+
+{% if "Invalid" in e %}
+
+<br><br>
+
+<a
+href="/register"
+class="register-link">
+
+Create Account →
+
+</a>
+
+{% endif %}
+
+
+</div>
+
+{% endif %}
+
+
+
+<form method="post">
+
+{% csrf_token %}
+
+
+<input
+
+name="username"
+
+placeholder="Username"
+
+required
+
+>
+
+
+
+<input
+
+type="password"
+
+name="password"
+
+placeholder="Password"
+
+required
+
+>
+
+
+
+<button
+class="auth-btn">
+
+Login
+
+</button>
+
+
+
+<p class="bottom-text">
+
+Don't have account?
+
+<a href="/register">
+
+Register
+
+</a>
+
+</p>
+
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
 {% endblock %}

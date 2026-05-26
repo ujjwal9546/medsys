@@ -2,130 +2,92 @@
 
 {% block content %}
 
-<div class="card">
 
-<h2>
+<a
+href="/doctor_history"
+class="btn btn-primary mb-4">
 
-Appointment Requests
+View History
 
-</h2>
+</a>
 
-
-<table class="table">
-
-<tr>
-
-<th>
-
-Patient
-
-</th>
-
-<th>
-
-Date
-
-</th>
-
-<th>
-
-Time
-
-</th>
-
-<th>
-
-Reason
-
-</th>
-
-<th>
-
-Status
-
-</th>
-
-<th>
-
-Action
-
-</th>
-
-</tr>
 
 
 {% for i in a %}
 
-<tr>
+<div class="appointment-card">
 
-<td>
+<h3>
 
 {{i.patient.user.username}}
 
-</td>
+</h3>
 
 
-<td>
+<p>
 
 {{i.date}}
 
-</td>
+</p>
 
 
-<td>
-
-{{i.time}}
-
-</td>
-
-
-<td>
+<p>
 
 {{i.reason}}
 
-</td>
+</p>
 
 
-<td>
 
-{{i.status}}
+{% if i.payment_screenshot %}
 
-</td>
+<img
+
+src="{{i.payment_screenshot.url}}"
+
+class="receipt-img"
+
+>
+
+{% endif %}
 
 
-<td>
-
-{% if i.status == 'pending' %}
 
 <a
-class="btn btn-success"
 
-href="/approve_appointment/{{i.id}}">
+href="/approve_appointment/{{i.id}}"
+
+class="btn btn-success">
 
 Approve
 
 </a>
 
 
-<a
-class="btn btn-danger"
 
-href="/reject_appointment/{{i.id}}">
+<a
+
+href="/reject_appointment/{{i.id}}"
+
+class="btn btn-danger">
 
 Reject
 
 </a>
 
-{% endif %}
 
-</td>
+</div>
 
-</tr>
+
+{% empty %}
+
+<h3>
+
+No pending requests
+
+</h3>
 
 {% endfor %}
 
-</table>
-
-</div>
 
 {% endblock %}
