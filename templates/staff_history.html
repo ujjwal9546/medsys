@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">
+
+📋 Appointment History
+
+</h1>
+
+<h4>
+
+Doctor:
+Dr {{doctor.user.name|default:doctor.user.username}}
+
+</h4>
+
+
+{% for i in a %}
+
+<div class="appointment-card">
+
+<h3>
+
+{{i.patient.user.name|default:i.patient.user.username}}
+
+</h3>
+
+<p>
+
+📅 {{i.date}}
+
+</p>
+
+<p>
+
+🕒 {{i.time}}
+
+</p>
+
+<p>
+
+📝 {{i.reason}}
+
+</p>
+
+<p>
+
+💰 ₹{{i.final_amount}}
+
+</p>
+
+<p>
+
+Status:
+{{i.status}}
+
+</p>
+
+{% if i.payment_screenshot %}
+
+<img
+src="{{i.payment_screenshot.url}}"
+class="receipt-img"
+>
+
+{% endif %}
+
+</div>
+
+{% empty %}
+
+<h3>
+
+No history available
+
+</h3>
+
+{% endfor %}
+
+{% endblock %}

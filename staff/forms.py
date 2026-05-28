@@ -5,37 +5,28 @@ from accounts.models import User
 class StaffForm(forms.ModelForm):
 
     password=forms.CharField(
-
         widget=forms.PasswordInput(
-
             attrs={
                 'placeholder':'Enter password'
             }
-
         )
-
     )
-
 
     confirm_password=forms.CharField(
-
         widget=forms.PasswordInput(
-
             attrs={
-                'placeholder':
-                'Confirm password'
+                'placeholder':'Confirm password'
             }
-
         )
-
     )
-
 
     class Meta:
 
         model=User
 
         fields=[
+
+            'name',
 
             'username',
 
@@ -62,14 +53,10 @@ class StaffForm(forms.ModelForm):
             'confirm_password'
         )
 
-
         if password != confirm:
 
             raise forms.ValidationError(
-
                 "Passwords do not match"
-
             )
-
 
         return cleaned_data

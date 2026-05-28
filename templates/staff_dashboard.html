@@ -6,13 +6,13 @@
 
 <h1>
 
-Staff Dashboard 👨‍💼
+Welcome {{request.user.name|default:request.user.username}} 👨‍💼
 
 </h1>
 
 <p>
 
-Assist doctors and manage patient flow
+Managing Dr {{staff.doctor.user.name|default:staff.doctor.user.username}}
 
 </p>
 
@@ -22,8 +22,9 @@ Assist doctors and manage patient flow
 
 <div class="dashboard-grid">
 
+
 <a
-href="/doctor_appointments"
+href="/staff_appointments/"
 class="dashboard-card">
 
 <div class="dash-icon">
@@ -34,13 +35,13 @@ class="dashboard-card">
 
 <h3>
 
-Appointments
+Pending Appointments
 
 </h3>
 
 <p>
 
-View doctor appointments
+Approve or reject appointments
 
 </p>
 
@@ -49,30 +50,8 @@ View doctor appointments
 
 
 <a
-href="/"
+href="/staff_history/"
 class="dashboard-card">
-
-<div class="dash-icon">
-
-🏥
-
-</div>
-
-<h3>
-
-Hospital Panel
-
-</h3>
-
-<p>
-
-Manage healthcare operations
-
-</p>
-
-</a>
-
-<a href="/my_appointments/" class="dashboard-card">
 
 <div class="dash-icon">
 
@@ -80,6 +59,31 @@ Manage healthcare operations
 
 </div>
 
+<h3>
+
+Appointment History
+
+</h3>
+
+<p>
+
+View approved and rejected appointments
+
+</p>
+
+</a>
+
+
+
+<a
+href="/my_appointments/"
+class="dashboard-card">
+
+<div class="dash-icon">
+
+🩺
+
+</div>
 
 <h3>
 
@@ -87,13 +91,11 @@ My Bookings
 
 </h3>
 
-
 <p>
 
-View appointments you booked for yourself
+View appointments booked for yourself
 
 </p>
-
 
 </a>
 

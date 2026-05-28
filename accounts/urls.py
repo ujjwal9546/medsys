@@ -33,4 +33,7 @@ path('delete_patient_appointment/<int:id>/',delete_patient_appointment),
 path('delete_doctor_appointment/<int:id>/',delete_doctor_appointment),
 path('clear_patient_history/',clear_patient_history),
 path('clear_doctor_history/',clear_doctor_history,name='clear_doctor_history'),
+path('view_staff/',view_staff,name='view_staff'),
+path('staff_appointments/',staff_appointments,name='staff_appointments'),
+path('staff_history/',staff_history,name='staff_history'),
 ]

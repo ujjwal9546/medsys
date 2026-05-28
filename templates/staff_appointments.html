@@ -2,15 +2,18 @@
 
 {% block content %}
 
+<h1 class="mb-4">
 
-<a
-href="/doctor_history"
-class="btn btn-primary mb-4">
+📅 Pending Appointments
 
-View History
+</h1>
 
-</a>
+<h4>
 
+Doctor:
+Dr {{doctor.user.name|default:doctor.user.username}}
+
+</h4>
 
 
 {% for i in a %}
@@ -19,10 +22,9 @@ View History
 
 <h3>
 
-{{i.patient.user.username}}
+{{i.patient.user.name|default:i.patient.user.username}}
 
 </h3>
-
 
 <p>
 
@@ -30,13 +32,11 @@ View History
 
 </p>
 
-
 <p>
 
 🕒 {{i.time}}
 
 </p>
-
 
 <p>
 
@@ -44,22 +44,17 @@ View History
 
 </p>
 
-
 <p>
 
-💰 Paid Amount:
+💰 ₹{{i.final_amount}}
 
-₹{{i.final_amount}}
 </p>
-
 
 {% if i.coupon_code %}
 
 <p>
 
-🎟 Coupon:
-
-{{i.coupon_code}}
+🎟 {{i.coupon_code}}
 
 (-₹{{i.discount}})
 
@@ -67,76 +62,41 @@ View History
 
 {% endif %}
 
-
-
-<p>
-
-Payment:
-
-{{i.payment_status}}
-
-</p>
-
-
-<p>
-
-Status:
-
-{{i.status}}
-
-</p>
-
-
-
 {% if i.payment_screenshot %}
 
 <img
-
 src="{{i.payment_screenshot.url}}"
-
 class="receipt-img"
-
 >
 
 {% endif %}
 
-
-
 <a
-
 href="/approve_appointment/{{i.id}}"
-
 class="btn btn-success">
 
 Approve
 
 </a>
 
-
-
 <a
-
 href="/reject_appointment/{{i.id}}"
-
 class="btn btn-danger">
 
 Reject
 
 </a>
 
-
 </div>
-
 
 {% empty %}
 
 <h3>
 
-No pending requests
+No pending appointments
 
 </h3>
 
 {% endfor %}
-
 
 {% endblock %}

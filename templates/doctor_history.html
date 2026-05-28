@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
 
@@ -47,9 +48,26 @@ Clear History
 
 <p>
 
-💰 ₹{{i.amount}}
+💰 Paid Amount:
+
+₹{{i.final_amount}}
+</p>
+
+
+{% if i.coupon_code %}
+
+<p>
+
+🎟 Coupon:
+
+{{i.coupon_code}}
+
+(-₹{{i.discount}})
 
 </p>
+
+{% endif %}
+
 
 
 <p>
@@ -104,7 +122,6 @@ Delete
 
 {% empty %}
 
-
 <h3>
 
 No appointment history
@@ -113,7 +130,6 @@ No appointment history
 
 
 {% endfor %}
-
 
 
 {% endblock %}

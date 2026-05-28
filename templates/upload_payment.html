@@ -4,16 +4,13 @@
 
 <div class="card p-4">
 
-
 <h2>
 
 👨‍⚕️ Doctor:
 
-{{a.doctor.user.name|default:a.doctor.user.username}}
+{{a.doctor.user.username}}
 
 </h2>
-
-
 
 <h3>
 
@@ -23,13 +20,31 @@
 
 </h3>
 
+{% if success %}
 
+<p style="color:green;">
+
+{{success}}
+
+</p>
+
+{% endif %}
+
+{% if e %}
+
+<p style="color:red;">
+
+{{e}}
+
+</p>
+
+{% endif %}
 
 {% if a.discount > 0 %}
 
 <p style="color:green;">
 
-🎉 Coupon Applied:
+🎟 Coupon Applied:
 
 <strong>
 
@@ -38,8 +53,6 @@
 </strong>
 
 </p>
-
-
 
 <p style="color:green;">
 
@@ -51,8 +64,6 @@ Discount:
 
 {% endif %}
 
-
-
 <h2>
 
 ✅ Final Amount:
@@ -60,8 +71,6 @@ Discount:
 ₹{{a.final_amount}}
 
 </h2>
-
-
 
 {% if a.doctor.payment_qr %}
 
@@ -73,7 +82,6 @@ width="250"
 
 >
 
-
 <p>
 
 Scan QR & Pay
@@ -82,19 +90,12 @@ Scan QR & Pay
 
 {% endif %}
 
-
-
 <form
-
 method="POST"
-
 enctype="multipart/form-data"
-
 >
 
 {% csrf_token %}
-
-
 
 <label>
 
@@ -102,39 +103,25 @@ enctype="multipart/form-data"
 
 </label>
 
-
 <input
-
 type="text"
-
 name="coupon"
-
 placeholder="Enter MED10"
-
 class="form-control"
 
 >
 
-
 <br>
 
-
 <button
-
 type="submit"
-
+name="apply_coupon"
 class="btn btn-warning"
-
 >
-
 Apply Coupon
-
 </button>
 
-
 <hr>
-
-
 
 <label>
 
@@ -142,34 +129,23 @@ Apply Coupon
 
 </label>
 
-
 <input
-
 type="file"
-
 name="payment_screenshot"
 
 >
 
-
 <br><br>
 
-
-
 <button
-
+type="submit"
+name="submit_payment"
 class="btn btn-success"
-
 >
-
 Submit Payment
-
 </button>
 
-
-
 </form>
-
 
 </div>
 
